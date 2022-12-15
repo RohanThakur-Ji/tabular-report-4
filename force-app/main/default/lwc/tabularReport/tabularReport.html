@@ -1,0 +1,103 @@
+<template>
+    <lightning-card title="Tablular Reports" icon-name="utility:table">
+        <lightning-spinner alternative-text="Loading" size="x-large" variant="brand" if:true={showSpinner}></lightning-spinner>
+        <div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin: 1rem 0.9rem; height: 5rem;">
+                <div style="display: flex;">
+                    <div style="display: flex;">
+                        <lightning-combobox
+                            name="startMonth"
+                            label="Start Month"
+                            value={startMonthComboboxValue}
+                            placeholder="Months"
+                            options={monthOptions}
+                            field-level-help={startMonthAndYearHelpText}
+                            onchange={handleStartMonthPicklist} disabled={disableCombox}>
+                        </lightning-combobox>
+                        <lightning-combobox
+                            class="slds-m-left_small"
+                            name="startYear"
+                            label="Start Year"
+                            value={startYearComboboxValue}
+                            placeholder="Years"
+                            options={yearOptions}
+                            onchange={handleStartYearPicklist} disabled={disableCombox}>
+                        </lightning-combobox>
+                    </div>
+                    <div style="display: flex;">
+                        <lightning-combobox
+                            class="slds-m-left_small"
+                            name="endMonth"
+                            label="End Month"
+                            value={endMonthComboboxValue}
+                            placeholder="Months"
+                            options={monthOptions}
+                            field-level-help={endMonthAndYearHelpText}
+                            onchange={handleEndMonthPicklist} disabled={disableCombox}>
+                        </lightning-combobox>
+                        <lightning-combobox
+                            class="slds-m-left_small"
+                            name="endYear"
+                            label="End Year"
+                            value={endYearComboboxValue}
+                            placeholder="Years"
+                            options={yearOptions}
+                            onchange={handleEndYearPicklist} disabled={disableCombox}>
+                        </lightning-combobox>
+                    </div>
+                    <div style="display: flex; align-items: flex-end; margin-top: 10px;">
+                        <lightning-button class="slds-m-left_small" variant="brand" label="Get Data" title="Get Ranged Dataset" onclick={handleGetDataPicklist} disabled={disableCombox}></lightning-button>
+                        <lightning-button class="slds-m-left_small" variant="brand-outline" label="Reset" title="Reset" onclick={handleResetPicklist} disabled={disableReset}></lightning-button>
+                    </div> 
+                </div>
+                <div style="display: flex; align-items: flex-end">
+                    <div class="slds-p-left_medium">
+                        <lightning-button-icon class="slds-m-right_x-small" icon-name='utility:chevronleft'  variant="border-filled" alternative-text="Previous 12 months dataset" title="Previous 12 months dataset" data-button="left" onclick={handlePreviousYears} disabled={disableLeft}></lightning-button-icon>
+                    </div>
+                    <div class="slds-p-right_medium">
+                        <lightning-button-icon class="slds-m-left_x-small" icon-name='utility:chevronright'  variant="border-filled" alternative-text="Next 12 months dataset" title="Next 12 months dataset" data-button="right" onclick={handleNextYears} disabled={disableRight}></lightning-button-icon>
+                    </div>
+                </div>
+            </div>
+            <template if:true={mrrDatalist}>
+                <div class="custom-horizontal-scrollbar" style="margin: 1.6rem 0.5rem; height: 20rem;  scrollbar-width: thin;">
+                    <h2 class="slds-m-bottom_xx-small slds-text-heading_medium">Monthly Recurring Revenue</h2>
+                    <lightning-datatable
+                        class="slds-m-bottom_medium"
+                        key-field="id"
+                        data={mrrDatalist}
+                        show-row-number-column
+                        hide-checkbox-column
+                        columns={columnsList}
+                        enable-infinite-loading={mrrInfiniteLoading}
+                        onloadmore={loadMoreMRRData}
+                        onrowaction={handleTabularReport}>
+                    </lightning-datatable>
+                </div>
+            </template>
+            <template if:true={mrrDataError}>
+                <div class="slds-p-around_large">
+                    <div class="slds-text-heading_medium slds-text-align_center slds-text-color_error">Failed to fetch report data! <br />Please refersh the page.</div>
+                </div>
+            </template>
+            </div>
+
+            <div class="slds-m-vertical_medium" style="height: 0.5rem;"></div>
+
+            <template if:true={mrrDatalist}>
+                <div style="margin: 2rem 0;">
+                    <div style="margin: 1.25rem 0.5rem;">
+                        <h2 class="slds-m-bottom_xx-small slds-text-heading_medium">Monthly Cash Flow</h2>
+                        <lightning-datatable
+                            class="slds-m-top_medium"
+                            key-field="id"
+                            data={aggregateDataList}
+                            hide-checkbox-column
+                            columns={aggregateColumnsList}
+                            onrowaction={handleAggregateTabularReh3ort}>
+                        </lightning-datatable>
+                    </div>
+                </div>
+            </template>
+    </lightning-card>
+</template>
